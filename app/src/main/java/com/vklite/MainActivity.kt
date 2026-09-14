@@ -2,91 +2,66 @@ package com.vklite
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 data class Post(
     val author: String,
     val text: String
 )
 
-data class Chat(
-    val name: String,
-    val lastMessage: String
-)
-
 class MainActivity : AppCompatActivity() {
 
     private val posts = listOf(
         Post("Иван Иванов", "Первый тестовый пост"),
-        Post("Новости VKLite", "Версия 0.5 вышла"),
-        Post("Разработка", "Следующий шаг — VK API")
-    )
-
-    private val chats = listOf(
-        Chat("Алексей", "Привет!"),
-        Chat("VKLite Bot", "Система работает"),
-        Chat("Тестовый чат", "Последнее сообщение...")
+        Post("Новости VKLite", "Версия 0.6 вышла"),
+        Post("Разработка", "Теперь используется RecyclerView"),
+        Post("VKLite", "Следующий шаг — карточки постов")
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
-        val content = findViewById<TextView>(R.id.content)
+        val recycler =
+            findViewById<RecyclerView>(R.id.feedRecycler)
 
-        findViewById<Button>(R.id.feedBtn).setOnClickListener {
-            content.text = buildFeed()
-        }
+        recycler.layoutManager =
+            LinearLayoutManager(this)
 
-        findViewById<Button>(R.id.chatsBtn).setOnClickListener {
-            content.text = buildChats()
-        }
+        recycler.adapter =
+            FeedAdapter(posts)
 
-        findViewById<Button>(R.id.profileBtn).setOnClickListener {
-            content.text = buildProfile()
-        }
+        findViewById<Button>(R.id.feedBtn)
+            .setOnClickListener {
+                recycler.adapter =
+                    FeedAdapter(posts)
+            }
 
-        content.text = buildFeed()
-    }
+        findViewById<Button>(R.id.chatsBtn)
+            .setOnClickListener {
+                recycler.adapter =
+                    FeedAdapter(
+                        listOf(
+                            Post("Алексей", "Привет!"),
+                            Post("VKLite Bot", "Система работает"),
+                            Post("Тестовый чат", "Последнее сообщение...")
+                        )
+                    )
+            }
 
-    private fun buildFeed(): String {
-        val sb = StringBuilder()
-        sb.append("📰 Лента\n\n")
-
-        for (post in posts) {
-            sb.append(post.author)
-            sb.append("\n")
-            sb.append(post.text)
-            sb.append("\n\n────────────\n\n")
-        }
-
-        return sb.toString()
-    }
-
-    private fun buildChats(): String {
-        val sb = StringBuilder()
-        sb.append("💬 Сообщения\n\n")
-
-        for (chat in chats) {
-            sb.append(chat.name)
-            sb.append("\n")
-            sb.append(chat.lastMessage)
-            sb.append("\n\n────────────\n\n")
-        }
-
-        return sb.toString()
-    }
-
-    private fun buildProfile(): String {
-        return """
-👤 Профиль
-
-Пользователь
-
-Версия: 0.5
-
-Устройство готово к подключению VK API
-        """.trimIndent()
+        findViewById<Button>(R.id.profileBtn)
+            .setOnClickListener {
+                recycler.adapter =
+                    FeedAdapter(
+                        listOf(
+                            Post("Пользователь", "Версия 0.6"),
+                            Post("Статус", "Онлайн"),
+                            Post("VKLite", "Готов к VK API")
+                        )
+                    )
+            }
     }
 }
