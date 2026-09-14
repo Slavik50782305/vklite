@@ -13,13 +13,14 @@ class MainActivity : AppCompatActivity() {
 
         val root = LinearLayout(this)
         root.orientation = LinearLayout.VERTICAL
+        root.setPadding(32, 32, 32, 32)
 
         val title = TextView(this)
         title.text = "VKLite"
-        title.textSize = 28f
+        title.textSize = 30f
 
         val content = TextView(this)
-        content.text = "Лента новостей\n\nПост №1\nПост №2\nПост №3"
+        content.text = feedScreen()
         content.textSize = 18f
 
         val nav = LinearLayout(this)
@@ -35,15 +36,15 @@ class MainActivity : AppCompatActivity() {
         profileBtn.text = "Профиль"
 
         feedBtn.setOnClickListener {
-            content.text = "Лента новостей\n\nПост №1\nПост №2\nПост №3"
+            content.text = feedScreen()
         }
 
         chatsBtn.setOnClickListener {
-            content.text = "Сообщения\n\nДиалог 1\nДиалог 2\nДиалог 3"
+            content.text = chatsScreen()
         }
 
         profileBtn.setOnClickListener {
-            content.text = "Профиль\n\nИмя: Пользователь\nСтатус: Онлайн"
+            content.text = profileScreen()
         }
 
         nav.addView(feedBtn)
@@ -55,5 +56,64 @@ class MainActivity : AppCompatActivity() {
         root.addView(nav)
 
         setContentView(root)
+    }
+
+    private fun feedScreen(): String {
+        return """
+📰 Лента
+
+━━━━━━━━━━━━
+
+🔥 Первый пост
+
+Добро пожаловать в VKLite.
+
+━━━━━━━━━━━━
+
+📱 Второй пост
+
+Приложение собрано прямо с телефона.
+
+━━━━━━━━━━━━
+
+🚀 Третий пост
+
+Следующий шаг — авторизация VK.
+        """.trimIndent()
+    }
+
+    private fun chatsScreen(): String {
+        return """
+💬 Сообщения
+
+━━━━━━━━━━━━
+
+Алексей
+Привет!
+
+━━━━━━━━━━━━
+
+VKLite Bot
+Система работает.
+
+━━━━━━━━━━━━
+
+Тестовый чат
+Последнее сообщение...
+        """.trimIndent()
+    }
+
+    private fun profileScreen(): String {
+        return """
+👤 Профиль
+
+Имя: Пользователь
+
+Статус: Онлайн
+
+Версия: 0.3
+
+Устройство: Android
+        """.trimIndent()
     }
 }
