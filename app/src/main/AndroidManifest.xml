@@ -3,7 +3,7 @@
 
     <application
         android:label="VKLite"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        android:theme="@style/Theme.VKLite">
 
         <activity
             android:name=".MainActivity"
