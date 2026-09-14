@@ -2,7 +2,6 @@ package com.vklite
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -10,110 +9,54 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        val root = LinearLayout(this)
-        root.orientation = LinearLayout.VERTICAL
-        root.setPadding(32, 32, 32, 32)
+        val content = findViewById<TextView>(R.id.content)
 
-        val title = TextView(this)
-        title.text = "VKLite"
-        title.textSize = 30f
-
-        val content = TextView(this)
-        content.text = feedScreen()
-        content.textSize = 18f
-
-        val nav = LinearLayout(this)
-        nav.orientation = LinearLayout.HORIZONTAL
-
-        val feedBtn = Button(this)
-        feedBtn.text = "Лента"
-
-        val chatsBtn = Button(this)
-        chatsBtn.text = "Чаты"
-
-        val profileBtn = Button(this)
-        profileBtn.text = "Профиль"
-
-        feedBtn.setOnClickListener {
-            content.text = feedScreen()
+        findViewById<Button>(R.id.feedBtn).setOnClickListener {
+            content.text = feed()
         }
 
-        chatsBtn.setOnClickListener {
-            content.text = chatsScreen()
+        findViewById<Button>(R.id.chatsBtn).setOnClickListener {
+            content.text = chats()
         }
 
-        profileBtn.setOnClickListener {
-            content.text = profileScreen()
+        findViewById<Button>(R.id.profileBtn).setOnClickListener {
+            content.text = profile()
         }
 
-        nav.addView(feedBtn)
-        nav.addView(chatsBtn)
-        nav.addView(profileBtn)
-
-        root.addView(title)
-        root.addView(content)
-        root.addView(nav)
-
-        setContentView(root)
+        content.text = feed()
     }
 
-    private fun feedScreen(): String {
-        return """
+    private fun feed() = """
 📰 Лента
 
-━━━━━━━━━━━━
+Иван Иванов
+Первый тестовый пост
 
-🔥 Первый пост
+────────────
 
-Добро пожаловать в VKLite.
+Новости VKLite
+Версия 0.4
+""".trimIndent()
 
-━━━━━━━━━━━━
-
-📱 Второй пост
-
-Приложение собрано прямо с телефона.
-
-━━━━━━━━━━━━
-
-🚀 Третий пост
-
-Следующий шаг — авторизация VK.
-        """.trimIndent()
-    }
-
-    private fun chatsScreen(): String {
-        return """
+    private fun chats() = """
 💬 Сообщения
-
-━━━━━━━━━━━━
 
 Алексей
 Привет!
 
-━━━━━━━━━━━━
+────────────
 
 VKLite Bot
-Система работает.
+Система работает
+""".trimIndent()
 
-━━━━━━━━━━━━
-
-Тестовый чат
-Последнее сообщение...
-        """.trimIndent()
-    }
-
-    private fun profileScreen(): String {
-        return """
+    private fun profile() = """
 👤 Профиль
 
-Имя: Пользователь
+Пользователь
 
-Статус: Онлайн
-
-Версия: 0.3
-
-Устройство: Android
-        """.trimIndent()
-    }
+Версия 0.4
+""".trimIndent()
 }
