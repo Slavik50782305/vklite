@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 data class Post(
     val author: String,
@@ -15,12 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var recycler: RecyclerView
 
-    private val feedPosts = listOf(
-        Post("Иван Иванов", "Первый тестовый пост"),
-        Post("Новости VKLite", "Версия 0.9"),
-        Post("Разработка", "Добавлена нижняя навигация"),
-        Post("VKLite", "Скоро подключим интернет")
-    )
+    private lateinit var feedPosts: List<Post>
 
     private val chats = listOf(
         Post("Алексей", "Привет!"),
@@ -29,15 +26,17 @@ class MainActivity : AppCompatActivity() {
     )
 
     private val profile = listOf(
-        Post("Пользователь", "Версия 0.9"),
+        Post("Пользователь", "Версия 1.0"),
         Post("Статус", "Онлайн"),
-        Post("VKLite", "Готов к следующему обновлению")
+        Post("VKLite", "Данные читаются из JSON")
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
+        feedPosts = loadPosts()
 
         recycler = findViewById(R.id.feedRecycler)
         recycler.layoutManager = LinearLayoutManager(this)
@@ -68,5 +67,18 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun loadPosts(): List<Post> {
+
+        val json =
+            assets.open("posts.json")
+                .bufferedReader()
+                .use { it.readText() }
+
+        val type =
+            object : TypeToken<List<Post>>() {}.type
+
+        return Gson().fromJson(json, type)
     }
 }
