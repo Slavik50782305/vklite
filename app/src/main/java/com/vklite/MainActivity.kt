@@ -5,7 +5,29 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+data class Post(
+    val author: String,
+    val text: String
+)
+
+data class Chat(
+    val name: String,
+    val lastMessage: String
+)
+
 class MainActivity : AppCompatActivity() {
+
+    private val posts = listOf(
+        Post("Иван Иванов", "Первый тестовый пост"),
+        Post("Новости VKLite", "Версия 0.5 вышла"),
+        Post("Разработка", "Следующий шаг — VK API")
+    )
+
+    private val chats = listOf(
+        Chat("Алексей", "Привет!"),
+        Chat("VKLite Bot", "Система работает"),
+        Chat("Тестовый чат", "Последнее сообщение...")
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,49 +36,57 @@ class MainActivity : AppCompatActivity() {
         val content = findViewById<TextView>(R.id.content)
 
         findViewById<Button>(R.id.feedBtn).setOnClickListener {
-            content.text = feed()
+            content.text = buildFeed()
         }
 
         findViewById<Button>(R.id.chatsBtn).setOnClickListener {
-            content.text = chats()
+            content.text = buildChats()
         }
 
         findViewById<Button>(R.id.profileBtn).setOnClickListener {
-            content.text = profile()
+            content.text = buildProfile()
         }
 
-        content.text = feed()
+        content.text = buildFeed()
     }
 
-    private fun feed() = """
-📰 Лента
+    private fun buildFeed(): String {
+        val sb = StringBuilder()
+        sb.append("📰 Лента\n\n")
 
-Иван Иванов
-Первый тестовый пост
+        for (post in posts) {
+            sb.append(post.author)
+            sb.append("\n")
+            sb.append(post.text)
+            sb.append("\n\n────────────\n\n")
+        }
 
-────────────
+        return sb.toString()
+    }
 
-Новости VKLite
-Версия 0.4
-""".trimIndent()
+    private fun buildChats(): String {
+        val sb = StringBuilder()
+        sb.append("💬 Сообщения\n\n")
 
-    private fun chats() = """
-💬 Сообщения
+        for (chat in chats) {
+            sb.append(chat.name)
+            sb.append("\n")
+            sb.append(chat.lastMessage)
+            sb.append("\n\n────────────\n\n")
+        }
 
-Алексей
-Привет!
+        return sb.toString()
+    }
 
-────────────
-
-VKLite Bot
-Система работает
-""".trimIndent()
-
-    private fun profile() = """
+    private fun buildProfile(): String {
+        return """
 👤 Профиль
 
 Пользователь
 
-Версия 0.4
-""".trimIndent()
+Версия: 0.5
+
+Устройство готово к подключению VK API
+        """.trimIndent()
+    }
 }
