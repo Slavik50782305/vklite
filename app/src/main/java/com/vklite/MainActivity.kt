@@ -1,5 +1,8 @@
 package com.vklite
 
+import android.widget.Button
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var recycler: RecyclerView
 
-    private lateinit var feedPosts: List<Post>
+    private val feedPosts = mutableListOf<Post>()
 
     private val chats = listOf(
         Post("Алексей", "Привет!"),
@@ -36,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        feedPosts = loadPosts()
+        feedPosts.addAll(loadPosts())
 
         recycler = findViewById(R.id.feedRecycler)
         recycler.layoutManager = LinearLayoutManager(this)
@@ -44,7 +47,37 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNav =
             findViewById<BottomNavigationView>(R.id.bottomNav)
+        val addPostBtn =
+    findViewById<Button>(R.id.addPostBtn)
 
+addPostBtn.setOnClickListener {
+
+    val input = EditText(this)
+
+    AlertDialog.Builder(this)
+        .setTitle("Новый пост")
+        .setView(input)
+        .setPositiveButton("Опубликовать") { _, _ ->
+
+            val text = input.text.toString()
+
+            if (text.isNotBlank()) {
+
+                feedPosts.add(
+                    0,
+                    Post(
+                        "Пользователь",
+                        text
+                    )
+                )
+
+                recycler.adapter =
+                    FeedAdapter(feedPosts)
+            }
+        }
+        .setNegativeButton("Отмена", null)
+        .show()
+}
         bottomNav.setOnItemSelectedListener { item ->
 
             when (item.itemId) {
